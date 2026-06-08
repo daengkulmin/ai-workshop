@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coding with AI Workshop</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #f78166;
+      --accent4: #d2a8ff;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --gradient: linear-gradient(135deg, #58a6ff 0%, #d2a8ff 100%);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Thai', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-weight: 700;
+      font-size: 1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(88,166,255,0.12) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3);
+      border-radius: 999px;
+      padding: 0.3rem 1rem;
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+    }
+
+    .btn-primary:hover { background: #79b8ff; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { background: var(--surface2); border-color: var(--accent); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* AGENDA */
+    .agenda-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .agenda-item {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .agenda-item:hover { border-color: var(--accent); }
+
+    .agenda-time {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .agenda-title { font-weight: 600; }
+    .agenda-desc { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+    .tag-green { background: rgba(63,185,80,0.15); color: var(--accent2); }
+    .tag-purple { background: rgba(210,168,255,0.15); color: var(--accent4); }
+    .tag-red { background: rgba(247,129,102,0.15); color: var(--accent3); }
+
+    /* MODULES */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .module-card.m1::before { background: var(--accent); }
+    .module-card.m2::before { background: var(--accent2); }
+    .module-card.m3::before { background: var(--accent4); }
+    .module-card.m4::before { background: var(--accent3); }
+
+    .module-card:hover { transform: translateY(-3px); border-color: rgba(88,166,255,0.4); }
+
+    .module-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .module-num {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: monospace;
+      margin-bottom: 0.5rem;
+    }
+
+    .module-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .module-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .module-topics {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .module-topics li {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .module-topics li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* TOOLS */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tool-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .tool-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .tool-name { font-weight: 600; font-size: 0.9rem; }
+    .tool-desc { font-size: 0.775rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    /* LABS */
+    .labs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .lab-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .lab-item:hover { border-color: var(--accent2); }
+
+    .lab-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: rgba(63,185,80,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .lab-content h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .lab-content p { font-size: 0.875rem; color: var(--text-muted); }
+
+    .lab-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+    }
+
+    /* CODE BLOCK */
+    .code-showcase {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-dots { display: flex; gap: 0.4rem; }
+    .code-dots span {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .code-dots span:nth-child(1) { background: #ff5f57; }
+    .code-dots span:nth-child(2) { background: #febc2e; }
+    .code-dots span:nth-child(3) { background: #28c840; }
+
+    .code-filename {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .code-body {
+      padding: 1.5rem;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .code-body .kw { color: var(--accent4); }
+    .code-body .fn { color: var(--accent); }
+    .code-body .str { color: var(--accent2); }
+    .code-body .cm { color: var(--text-muted); }
+    .code-body .num { color: var(--accent3); }
+
+    /* PREREQS */
+    .prereq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .prereq-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .prereq-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .prereq-title { font-weight: 600; font-size: 0.9rem; }
+    .prereq-detail { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* DIVIDER */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* SCROLL SMOOTH */
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">⚡ AI Workshop</div>
+    <ul class="nav-links">
+      <li><a href="#agenda">Agenda</a></li>
+      <li><a href="#modules">Modules</a></li>
+      <li><a href="#labs">Labs</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#prereqs">Prerequisites</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <span>🚀</span> Hands-on Workshop
+    </div>
+    <h1>Coding with <span>AI</span><br/>เขียนโค้ดเร็วขึ้น<br/>ด้วย AI</h1>
+    <p class="hero-sub">
+      Workshop เข้มข้นสำหรับนักพัฒนา — เรียนรู้วิธีใช้ AI tools
+      เพื่อเพิ่ม productivity ตั้งแต่เขียน code ไปจนถึง debug และ review
+    </p>
+    <div class="hero-actions">
+      <a href="#agenda" class="btn btn-primary">ดู Agenda</a>
+      <a href="#labs" class="btn btn-outline">เริ่ม Lab</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Modules</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Hands-on Labs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">~4h</div>
+        <div class="stat-label">Duration</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">AI Tools</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- AGENDA -->
+  <section id="agenda">
+    <div class="section-header">
+      <div class="section-tag">📅 Schedule</div>
+      <h2>Workshop Agenda</h2>
+      <p>Timeline ตลอดวัน พร้อม activities และ labs</p>
+    </div>
+
+    <div class="agenda-grid">
+      <div class="agenda-item">
+        <div class="agenda-time">09:00 – 09:30</div>
+        <div>
+          <div class="agenda-title">Opening & Introduction</div>
+          <div class="agenda-desc">ภาพรวม AI landscape ในปัจจุบัน, LLM basics, และ setup environment</div>
+        </div>
+        <span class="tag tag-blue">Lecture</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">09:30 – 10:30</div>
+        <div>
+          <div class="agenda-title">Module 1: Prompt Engineering for Developers</div>
+          <div class="agenda-desc">เทคนิคการเขียน prompt ให้ได้ code ที่ดี — context, role, examples</div>
+        </div>
+        <span class="tag tag-purple">Lab</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">10:30 – 11:30</div>
+        <div>
+          <div class="agenda-title">Module 2: AI-Assisted Coding</div>
+          <div class="agenda-desc">ใช้ GitHub Copilot, Claude Code และ Cursor สำหรับ autocomplete และ generation</div>
+        </div>
+        <span class="tag tag-purple">Lab</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">11:30 – 12:00</div>
+        <div>
+          <div class="agenda-title">☕ Lunch Break</div>
+          <div class="agenda-desc">พัก</div>
+        </div>
+        <span class="tag tag-green">Break</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">12:00 – 13:00</div>
+        <div>
+          <div class="agenda-title">Module 3: AI Code Review & Debugging</div>
+          <div class="agenda-desc">ให้ AI ช่วย review PR, หา bug, และ suggest improvements</div>
+        </div>
+        <span class="tag tag-purple">Lab</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">13:00 – 14:00</div>
+        <div>
+          <div class="agenda-title">Module 4: Building AI-Powered Features</div>
+          <div class="agenda-desc">Integrate AI APIs เข้า project จริง — RAG, function calling, agents</div>
+        </div>
+        <span class="tag tag-red">Project</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">14:00 – 14:30</div>
+        <div>
+          <div class="agenda-title">Showcase & Wrap-up</div>
+          <div class="agenda-desc">Present งาน, Q&A, และ next steps</div>
+        </div>
+        <span class="tag tag-blue">Closing</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- MODULES -->
+  <section id="modules">
+    <div class="section-header">
+      <div class="section-tag">📚 Curriculum</div>
+      <h2>Workshop Modules</h2>
+      <p>4 modules ครอบคลุมทุก aspect ของการ Coding with AI</p>
+    </div>
+
+    <div class="modules-grid">
+      <div class="module-card m1">
+        <div class="module-icon">🧠</div>
+        <div class="module-num">MODULE 01</div>
+        <h3>Prompt Engineering for Devs</h3>
+        <p>เรียนรู้หลักการเขียน prompt ที่ได้ผลสำหรับงาน coding โดยเฉพาะ</p>
+        <ul class="module-topics">
+          <li>System prompts และ context setting</li>
+          <li>Few-shot examples สำหรับ code tasks</li>
+          <li>Chain-of-thought สำหรับ debugging</li>
+          <li>Structured output (JSON, TypeScript types)</li>
+        </ul>
+      </div>
+
+      <div class="module-card m2">
+        <div class="module-icon">⚡</div>
+        <div class="module-num">MODULE 02</div>
+        <h3>AI-Assisted Coding</h3>
+        <p>เพิ่ม velocity ด้วย AI autocomplete, generation, และ refactoring</p>
+        <ul class="module-topics">
+          <li>GitHub Copilot inline suggestions</li>
+          <li>Claude Code สำหรับ agentic tasks</li>
+          <li>Cursor IDE features</li>
+          <li>Test generation อัตโนมัติ</li>
+        </ul>
+      </div>
+
+      <div class="module-card m3">
+        <div class="module-icon">🔍</div>
+        <div class="module-num">MODULE 03</div>
+        <h3>AI Code Review & Debug</h3>
+        <p>ใช้ AI เป็น pair programmer สำหรับ review และ debug</p>
+        <ul class="module-topics">
+          <li>AI-assisted PR review</li>
+          <li>Bug hunting ด้วย context window</li>
+          <li>Security vulnerability detection</li>
+          <li>Performance optimization suggestions</li>
+        </ul>
+      </div>
+
+      <div class="module-card m4">
+        <div class="module-icon">🔧</div>
+        <div class="module-num">MODULE 04</div>
+        <h3>Building AI-Powered Features</h3>
+        <p>Integrate AI เข้า application จริงด้วย APIs และ patterns ที่ใช้งานได้</p>
+        <ul class="module-topics">
+          <li>Anthropic API & OpenAI API basics</li>
+          <li>RAG (Retrieval-Augmented Generation)</li>
+          <li>Function calling และ tool use</li>
+          <li>Streaming responses</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-showcase">
+      <div class="code-header">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <div class="code-filename">example — claude_api.py</div>
+        <span class="tag tag-blue">Module 04</span>
+      </div>
+      <div class="code-body">
+        <span class="kw">import</span> anthropic<br/><br/>
+        client = anthropic.<span class="fn">Anthropic</span>()<br/><br/>
+        <span class="cm"># สร้าง completion ด้วย Claude API</span><br/>
+        message = client.messages.<span class="fn">create</span>(<br/>
+        &nbsp;&nbsp;model=<span class="str">"claude-opus-4-6"</span>,<br/>
+        &nbsp;&nbsp;max_tokens=<span class="num">1024</span>,<br/>
+        &nbsp;&nbsp;messages=[<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Review this code and suggest improvements"</span>}<br/>
+        &nbsp;&nbsp;]<br/>
+        )<br/><br/>
+        <span class="fn">print</span>(message.content[<span class="num">0</span>].text)
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- LABS -->
+  <section id="labs">
+    <div class="section-header">
+      <div class="section-tag">🧪 Hands-on</div>
+      <h2>Workshop Labs</h2>
+      <p>6 labs ที่ลงมือทำจริง ตั้งแต่ง่ายไปยาก</p>
+    </div>
+
+    <div class="labs-list">
+      <div class="lab-item">
+        <div class="lab-num">01</div>
+        <div class="lab-content">
+          <h3>Setup AI Development Environment</h3>
+          <p>ติดตั้งและ configure Claude Code, GitHub Copilot, และ API keys สำหรับ workshop</p>
+          <div class="lab-tags">
+            <span class="tag tag-green">Beginner</span>
+            <span class="tag tag-blue">~20 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-item">
+        <div class="lab-num">02</div>
+        <div class="lab-content">
+          <h3>Prompt Patterns for Code Generation</h3>
+          <p>ฝึกเขียน prompts แบบต่างๆ เพื่อ generate function, class, และ module ที่ใช้งานได้จริง</p>
+          <div class="lab-tags">
+            <span class="tag tag-green">Beginner</span>
+            <span class="tag tag-blue">~30 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-item">
+        <div class="lab-num">03</div>
+        <div class="lab-content">
+          <h3>Refactor Legacy Code with AI</h3>
+          <p>นำโค้ดเก่าที่ให้มา ใช้ AI ช่วย refactor ให้ clean, readable, และ testable</p>
+          <div class="lab-tags">
+            <span class="tag tag-purple">Intermediate</span>
+            <span class="tag tag-blue">~30 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-item">
+        <div class="lab-num">04</div>
+        <div class="lab-content">
+          <h3>AI-Powered Test Suite</h3>
+          <p>Generate unit tests, edge cases, และ integration tests ด้วย AI จาก codebase ที่มีอยู่</p>
+          <div class="lab-tags">
+            <span class="tag tag-purple">Intermediate</span>
+            <span class="tag tag-blue">~30 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-item">
+        <div class="lab-num">05</div>
+        <div class="lab-content">
+          <h3>Build a Code Review Bot</h3>
+          <p>สร้าง script ที่รับ git diff แล้วใช้ Claude API เพื่อ review code และ output markdown report</p>
+          <div class="lab-tags">
+            <span class="tag tag-red">Advanced</span>
+            <span class="tag tag-blue">~45 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-item">
+        <div class="lab-num">06</div>
+        <div class="lab-content">
+          <h3>RAG-Powered Documentation Q&A</h3>
+          <p>สร้าง mini-app ที่ embed documentation แล้วให้ถาม-ตอบด้วย natural language</p>
+          <div class="lab-tags">
+            <span class="tag tag-red">Advanced</span>
+            <span class="tag tag-blue">~45 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <div class="section-header">
+      <div class="section-tag">🛠 Stack</div>
+      <h2>Tools ที่ใช้ใน Workshop</h2>
+      <p>AI tools และ libraries ที่จะได้ลองในวันนี้</p>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-name">Claude</div>
+        <div class="tool-desc">Anthropic's AI — API & Claude Code</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">👾</div>
+        <div class="tool-name">GitHub Copilot</div>
+        <div class="tool-desc">AI pair programmer in IDE</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">✏️</div>
+        <div class="tool-name">Cursor</div>
+        <div class="tool-desc">AI-first code editor</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🐍</div>
+        <div class="tool-name">Python SDK</div>
+        <div class="tool-desc">anthropic, openai packages</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📦</div>
+        <div class="tool-name">LangChain</div>
+        <div class="tool-desc">Framework สำหรับ LLM apps</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🗃️</div>
+        <div class="tool-name">Vector DB</div>
+        <div class="tool-desc">Chroma / Pinecone สำหรับ RAG</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PREREQS -->
+  <section id="prereqs">
+    <div class="section-header">
+      <div class="section-tag">✅ Before You Start</div>
+      <h2>Prerequisites</h2>
+      <p>สิ่งที่ต้องเตรียมก่อนมา workshop</p>
+    </div>
+
+    <div class="prereq-grid">
+      <div class="prereq-item">
+        <div class="prereq-icon">💻</div>
+        <div>
+          <div class="prereq-title">Laptop พร้อมใช้</div>
+          <div class="prereq-detail">macOS, Windows, หรือ Linux ก็ได้</div>
+        </div>
+      </div>
+      <div class="prereq-item">
+        <div class="prereq-icon">🐍</div>
+        <div>
+          <div class="prereq-title">Python 3.10+</div>
+          <div class="prereq-detail">ติดตั้งไว้บนเครื่อง</div>
+        </div>
+      </div>
+      <div class="prereq-item">
+        <div class="prereq-icon">🔑</div>
+        <div>
+          <div class="prereq-title">API Key</div>
+          <div class="prereq-detail">Anthropic API key (จะแจก free credits)</div>
+        </div>
+      </div>
+      <div class="prereq-item">
+        <div class="prereq-icon">📝</div>
+        <div>
+          <div class="prereq-title">VS Code หรือ Cursor</div>
+          <div class="prereq-detail">พร้อม extensions ที่แนะนำ</div>
+        </div>
+      </div>
+      <div class="prereq-item">
+        <div class="prereq-icon">🐙</div>
+        <div>
+          <div class="prereq-title">GitHub Account</div>
+          <div class="prereq-detail">สำหรับ Copilot และ lab repos</div>
+        </div>
+      </div>
+      <div class="prereq-item">
+        <div class="prereq-icon">🧑‍💻</div>
+        <div>
+          <div class="prereq-title">พื้นฐาน Coding</div>
+          <div class="prereq-detail">Python หรือ JS ระดับปานกลาง</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Coding with AI Workshop &nbsp;·&nbsp; Built with ❤️ for developers</p>
+    <p style="margin-top:0.5rem;">
+      <a href="https://daengkulmin.github.io">daengkulmin.github.io</a>
+    </p>
+  </footer>
+
+</body>
+</html>
